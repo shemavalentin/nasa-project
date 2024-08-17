@@ -1,6 +1,12 @@
+const API_URL = "http://localhost:8000";
+
 async function httpGetPlanets() {
-  // TODO: Once API is ready.
+  // Consuming getAllPlanets under local host and our set PORT: 8000  as the backend is running on 8000
+  // and my route is pointing to planets collection
+
+  const response = await fetch(`${API_URL}/planets`);
   // Load planets and return as JSON.
+  return await response.json();
 }
 
 async function httpGetLaunches() {
@@ -18,9 +24,4 @@ async function httpAbortLaunch(id) {
   // Delete launch with given ID.
 }
 
-export {
-  httpGetPlanets,
-  httpGetLaunches,
-  httpSubmitLaunch,
-  httpAbortLaunch,
-};
+export { httpGetPlanets, httpGetLaunches, httpSubmitLaunch, httpAbortLaunch };

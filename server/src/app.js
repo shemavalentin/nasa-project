@@ -1,8 +1,13 @@
-const express = require("rexpress");
+const express = require("express");
+
+const planetRouter = require("./routes/planets/planet.router");
+
 const app = express();
 // Here I will get the flexibility to pass express as a middleware when receiving the
 // JSON requests.
 app.use(express.json());
+
+app.use(planetRouter);
 
 module.exports = app;
 
