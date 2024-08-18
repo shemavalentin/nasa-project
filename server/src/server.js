@@ -6,14 +6,35 @@ const http = require("http");
 
 const app = require("./app");
 
+// importing planets.model module thtat has a function loadPlannetsData
+// that we need to wait to complete before listening for and respond to
+// requests.
+
+// const planetsModel = require('./routes/planets/planets.controller')
+
+// alternatively use destructuring to know that we using the imported function
+const { loadPlanetsData } = require("./models/planets.model");
+
 // setting the port: find on server in environment variables, if not found run on 8000
 const PORT = process.env.PORT || 8000;
 
 const server = http.createServer(app);
 
-server.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}...`);
-});
+async function startServer() {
+  // Awaiting loadPlanetsData function so that my planets data is available
+  // for any request that ever comes in to my server
+
+  await loadPlanetsData(); // notice no return value is need as it is on server
+
+  server.listen(PORT, () => {
+    console.log(`Listening on port ${PORT}...`);
+  });
+}
+
+// callig startServer() that will await the function to resolve and after
+// start listening
+
+startServer();
 
 // Moved express codes to app.js for more code organization
 // The added benefit of this is that now we can organize our code a little bit more,
