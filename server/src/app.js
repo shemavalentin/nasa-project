@@ -4,6 +4,8 @@ const express = require("express");
 
 const cors = require("cors");
 
+const morgan = require("morgan");
+
 const planetRouter = require("./routes/planets/planet.router");
 
 const app = express();
@@ -16,6 +18,9 @@ app.use(
     origin: "http://localhost:3000",
   })
 );
+
+// Adding a Morgan Middleware to manage logs from requests as they can fill up the server's disk
+app.use(morgan("combined"));
 
 // Here I will get the flexibility to pass express as a middleware when receiving the
 // JSON requests.

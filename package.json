@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "install-server":"npm install --prefix server",
+    "install-server": "npm install --prefix server",
     "install-client": "npm install --prefix client",
     "install": "npm install-server && npm run install-client",
     "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client",
@@ -17,9 +17,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "concurrently": "^8.2.2"
-  },
-  "devDependencies": {
-    
+    "concurrently": "^8.2.2",
+    "morgan": "^1.10.0"
   }
 }
