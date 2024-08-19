@@ -8,6 +8,8 @@ const morgan = require("morgan");
 
 const planetRouter = require("./routes/planets/planet.router");
 
+const launchesRouter = require("./routes/launches/launches.router");
+
 const app = express();
 
 // set CORS to whitelist request from different origins
@@ -31,11 +33,12 @@ app.use(express.static(path.join(__dirname, "..", "public"))); // the path.join 
 // and join two files using that path
 
 app.use(planetRouter);
+app.use(launchesRouter);
 
 // Serving the index.html to the root so that the user doesn't need to specify that he needs to load index.html
 // and so that that first page load corresponds to the launch page.
 // Telling express what to do when it sees '/'
-app.get("/", (req, res) => {
+app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "public", "index.html"));
 });
 
