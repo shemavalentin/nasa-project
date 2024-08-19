@@ -1,3 +1,5 @@
+const path = require("path");
+
 const express = require("express");
 
 const cors = require("cors");
@@ -18,8 +20,19 @@ app.use(
 // Here I will get the flexibility to pass express as a middleware when receiving the
 // JSON requests.
 app.use(express.json());
+// serving the optimized front end build folder to production after setting the path in
+// client package.json.
+app.use(express.static(path.join(__dirname, "..", "public"))); // the path.join helps to find the file we want through the path
+// and join two files using that path
 
 app.use(planetRouter);
+
+// Serving the index.html to the root so that the user doesn't need to specify that he needs to load index.html
+// and so that that first page load corresponds to the launch page.
+// Telling express what to do when it sees '/'
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "public", "index.html"));
+});
 
 module.exports = app;
 
