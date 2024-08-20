@@ -3,16 +3,16 @@ const express = require("express");
 
 // We need to import the controller into the routes that hooks up our controller
 
-const { getAllLaunches } = require("./launches.controller");
+const { httpGetAllLaunches } = require("./launches.controller");
 
-// Defining launchesRouter in app.js to be an Express.router object
+// Defining launchesRouter, a variable to be an Express.router object
 
 const launchesRouter = express.Router();
 
 // Then basing on our launchesRouter set to express router which we can now need to define
 // routs on
 
-launchesRouter.get("/launches", getAllLaunches);
+launchesRouter.get("/launches", httpGetAllLaunches);
 
 // Now export launchesRouter so that we can use it in app.js
 module.exports = launchesRouter;

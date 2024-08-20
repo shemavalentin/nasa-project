@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const { parse } = require("csv-parse");
 
-const habitablePlanet = [];
+const habitablePlanets = [];
 
 function isHabitablePlanet(planet) {
   return (
@@ -29,7 +29,7 @@ function loadPlanetsData() {
       )
       .on("data", (data) => {
         if (isHabitablePlanet(data)) {
-          habitablePlanet.push(data);
+          habitablePlanets.push(data);
         }
       })
       .on("error", (error) => {
@@ -39,17 +39,22 @@ function loadPlanetsData() {
       })
 
       .on("end", () => {
-        console.log(`${habitablePlanet.length} habitable planets found!`);
+        console.log(`${habitablePlanets.length} habitable planets found!`);
 
-        // Then we are done parsing our data and the habitablePlanet is populated,
+        // Then we are done parsing our data and the habitablePlanets is populated,
         //we call resolve()
         resolve();
       });
   });
 }
 
+// Creating ACCESS function to abstracts calculationd that is passed to the controller
+function getAllPlanets() {
+  return habitablePlanets;
+}
+
 module.exports = {
   //using the function after it was resolved or rejected here to be accessible
   loadPlanetsData,
-  planets: habitablePlanet,
+  getAllPlanets,
 };
