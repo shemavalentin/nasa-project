@@ -32,8 +32,8 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "..", "public"))); // the path.join helps to find the file we want through the path
 // and join two files using that path
 
-app.use(planetRouter);
-app.use(launchesRouter);
+app.use("/planets", planetRouter);
+app.use("/launches", launchesRouter);
 
 // Serving the index.html to the root so that the user doesn't need to specify that he needs to load index.html
 // and so that that first page load corresponds to the launch page.

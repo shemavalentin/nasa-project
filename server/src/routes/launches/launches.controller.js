@@ -9,7 +9,10 @@
 //const launchesModel = require("../../models/launches.model");
 
 // Let's use HTTP to be more explicity
-const { getAllLaunches } = require("../../models/launches.model");
+const {
+  getAllLaunches,
+  addNewLaunche,
+} = require("../../models/launches.model");
 
 // Now with that the Controller that briges Routes and Model was blank
 // let's connect both of them
@@ -37,6 +40,20 @@ function httpGetAllLaunches(req, res) {
   // Note: As we know, every function starting with http returns a response
 }
 
+// Function controlller to handle added new launches
+function httpAddNewLaunch(req, res) {
+  const launch = req.body; // the express server middleware will parse it in the body in app.js
+  launch.launchDate = new Date(launch.launchDate);
+
+  addNewLaunche(launch);
+
+  // what to return now? Remember, when we POST to a collection and the request succeeds
+  // we want to show the status
+
+  return res.status(201).json(launch);
+}
+
 module.exports = {
   httpGetAllLaunches,
+  httpAddNewLaunch,
 };

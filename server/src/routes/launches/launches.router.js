@@ -3,7 +3,10 @@ const express = require("express");
 
 // We need to import the controller into the routes that hooks up our controller
 
-const { httpGetAllLaunches } = require("./launches.controller");
+const {
+  httpGetAllLaunches,
+  httpAddNewLaunch,
+} = require("./launches.controller");
 
 // Defining launchesRouter, a variable to be an Express.router object
 
@@ -12,7 +15,14 @@ const launchesRouter = express.Router();
 // Then basing on our launchesRouter set to express router which we can now need to define
 // routs on
 
-launchesRouter.get("/launches", httpGetAllLaunches);
+// launchesRouter.get("/launches", httpGetAllLaunches);
+
+// by using mounting path in app.js, we can use shorten things to let launchesRouter respond to only /launches
+launchesRouter.get("/", httpGetAllLaunches);
+
+// launchesRouter.post("/launches", httpAddNewLaunch);
+
+launchesRouter.post("/", httpAddNewLaunch);
 
 // Now export launchesRouter so that we can use it in app.js
 module.exports = launchesRouter;

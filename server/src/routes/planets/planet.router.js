@@ -7,6 +7,8 @@ const { httpGetAllPlanets } = require("./planets.controller");
 const planetRouter = express.Router();
 
 // Getting all planets under th / collection
-planetRouter.get("/planets", httpGetAllPlanets);
+
+// planetRouter.get("/planets", httpGetAllPlanets);
+planetRouter.get("/", httpGetAllPlanets); // using mounting strategy
 
 module.exports = planetRouter;
