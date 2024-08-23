@@ -1,8 +1,10 @@
 //Let's use Map() function to allow mapping keys and values
 const launches = new Map();
 
-// Let's say we need to store our launches into a javascript object
+// To create the new launche we need to track the flightNumber and not the client to send it to us
+let latestFlightNumber = 100; // as it is in launch object
 
+// Let's say we need to store our launches into a javascript object
 const launch = {
   flightNumber: 100,
   mission: "Kepler Exploration X",
@@ -27,12 +29,35 @@ function getAllLaunches() {
   return Array.from(launches.values());
 }
 
+//Writting a function that our router can use to set our launches in the launches Map()
+// the function will accept launche which will be added to the collection
+function addNewLaunche(launch) {
+  // Now use the latestFlightNumber to increament it on server side
+  latestFlightNumber += 1;
+  //return launches.set(latestFlightNumber, launche);
+
+  //return launches.set(latestFlightNumber, launch); // Notice that here latestFlightNumber is the key and launch is the value
+  // Now we need to add that latestFlightNumber into our launch by assigning it to launch like this
+
+  return launches.set(
+    latestFlightNumber,
+    Object.assign(launch, {
+      /// launch: where to put, and the source
+      success: true,
+      upcoming: true,
+      customers: ["Clever Technologies", "NAZA"],
+      flightNumber: latestFlightNumber,
+    })
+  );
+}
+
 // Now let's access our launches
 //launches.get(100); // instead of doing this, let's export this module so that we can use
 // it in the rest our code.
 
 module.exports = {
   getAllLaunches,
+  addNewLaunche,
 };
 
 // Now I'm all set to build my launces router and expose our launches model to our
