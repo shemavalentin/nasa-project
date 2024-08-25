@@ -49,7 +49,7 @@ function httpAddNewLaunch(req, res) {
     !launch.mission ||
     !launch.rocket ||
     !launch.launchDate ||
-    !launch.destination
+    !launch.target
   ) {
     return res.status(404).json({
       // We need to be consistent to the format. we could also have to return with a string

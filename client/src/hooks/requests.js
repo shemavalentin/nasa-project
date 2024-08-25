@@ -23,9 +23,28 @@ async function httpGetLaunches() {
   });
 }
 
+// Submit given launch data to launch system.
 async function httpSubmitLaunch(launch) {
-  // TODO: Once API is ready.
-  // Submit given launch data to launch system.
+  // TODO: Once API is ready. Connecting API and front End
+  // remember that fetch method default to the GET method. now we need to add in the method
+  // as a parameter to it
+  try {
+    return await fetch(`${API_URL}/launches`, {
+      method: "post",
+      // Now add the launch as the body that is received by this function
+      //body: launch, // fetch function in the browser receives a string while the lauch here is an object.
+
+      // We need to convert it into a string. then if we pass in the json, we have to add the header
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(launch),
+    });
+  } catch (error) {
+    return {
+      ok: false,
+    };
+  }
 }
 
 async function httpAbortLaunch(id) {
