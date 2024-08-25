@@ -9,11 +9,11 @@
 //const launchesModel = require("../../models/launches.model");
 
 // Let's use HTTP to be more explicity
-const { httpAbortLaunch } = require("../../../../client/src/hooks/requests");
 const {
   getAllLaunches,
   addNewLaunche,
   existsLaunchWithId,
+  abortLaunchById,
 } = require("../../models/launches.model");
 
 // Now with that the Controller that briges Routes and Model was blank
@@ -84,7 +84,12 @@ function httpAddNewLaunch(req, res) {
 
 function httpAbortLaunch(req, res) {
   // Here we need to get the lauchId, How do we get the Id need it?
-  const launchId = req.params.id;
+  // But like this, the id is comming back as string while in Map in model is a number
+  // so, we need to convert it into a numbet
+  //const launchId = req.params.id;
+  //const launchId = + req.params.id;  But let's be explicit
+  const launchId = Number(req.params.id);
+
   // if launch not exist
   if (!existsLaunchWithId(launchId)) {
     return res.status(404).json({
@@ -93,11 +98,14 @@ function httpAbortLaunch(req, res) {
   }
 
   // If the lauch does exist
+  const aborted = abortLaunchById(launchId);
   return res.status(200).json(aborted);
 }
 
 module.exports = {
+  existsLaunchWithId,
   httpGetAllLaunches,
   httpAddNewLaunch,
+  addNewLaunche,
   httpAbortLaunch,
 };

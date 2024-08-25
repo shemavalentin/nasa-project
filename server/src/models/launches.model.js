@@ -58,7 +58,25 @@ function addNewLaunche(launch) {
 }
 
 // Creating a function to abort a lauch by Id
-function abortLaunchById() {}
+function abortLaunchById(launchId) {
+  // this will completely delete the launch.
+  //launches.delete(launchId);
+  // whether to completely delete it, let's mark it as aborted instead of removing it
+  // after all that data is still usefull to us.
+
+  // Now
+  const aborted = launches.get(launchId);
+  // then on that object, we set aborted to upcomming and now upcomming missions are no
+  // longer upcomming. they are entirely cancelled.
+
+  aborted.upcoming = false;
+
+  // then mutate the aborted object property to false,
+  aborted.success = false;
+  // here the mission is going to be in historical list, and will be marked as not successful.
+  // that's what we needed.
+  return aborted;
+}
 
 // Now let's access our launches
 //launches.get(100); // instead of doing this, let's export this module so that we can use
