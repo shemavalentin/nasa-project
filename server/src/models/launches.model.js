@@ -19,6 +19,11 @@ const launch = {
 // From Map function let's set the launches
 launches.set(launch.flightNumber, launch); // here launch.flightNumber is passed as a key and the launch as value
 
+// The function to check the existence of the id in model
+function existsLaunchWithId(launchId) {
+  return launches.has(launchId);
+}
+
 /* TO ABSTRACT AWAY THE COMPUTATION THAT OTHER WORLD DOESN'T NEED TO CARE WE HAVE TO 
 WRITE ANOTHER FUNCTION TO COMPUTE OUT DATA STRUCTURES.
 */
@@ -52,6 +57,9 @@ function addNewLaunche(launch) {
   );
 }
 
+// Creating a function to abort a lauch by Id
+function abortLaunchById() {}
+
 // Now let's access our launches
 //launches.get(100); // instead of doing this, let's export this module so that we can use
 // it in the rest our code.
@@ -59,6 +67,8 @@ function addNewLaunche(launch) {
 module.exports = {
   getAllLaunches,
   addNewLaunche,
+  existsLaunchWithId,
+  abortLaunchById,
 };
 
 // Now I'm all set to build my launces router and expose our launches model to our

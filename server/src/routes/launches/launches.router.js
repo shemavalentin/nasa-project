@@ -1,11 +1,13 @@
 // To start off, we need to import the express as we need it's built in routers
 const express = require("express");
 
+const { httpAbortLaunch } = require("../../../../client/src/hooks/requests");
 // We need to import the controller into the routes that hooks up our controller
 
 const {
   httpGetAllLaunches,
   httpAddNewLaunch,
+  httpAbortLaunch,
 } = require("./launches.controller");
 
 // Defining launchesRouter, a variable to be an Express.router object
@@ -23,6 +25,10 @@ launchesRouter.get("/", httpGetAllLaunches);
 // launchesRouter.post("/launches", httpAddNewLaunch);
 
 launchesRouter.post("/", httpAddNewLaunch);
+
+// Let's create now the abort route
+
+launchesRouter.delete("/:id", httpAbortLaunch);
 
 // Now export launchesRouter so that we can use it in app.js
 module.exports = launchesRouter;

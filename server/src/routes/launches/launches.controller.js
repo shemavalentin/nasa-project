@@ -9,9 +9,11 @@
 //const launchesModel = require("../../models/launches.model");
 
 // Let's use HTTP to be more explicity
+const { httpAbortLaunch } = require("../../../../client/src/hooks/requests");
 const {
   getAllLaunches,
   addNewLaunche,
+  existsLaunchWithId,
 } = require("../../models/launches.model");
 
 // Now with that the Controller that briges Routes and Model was blank
@@ -80,7 +82,22 @@ function httpAddNewLaunch(req, res) {
   return res.status(201).json(launch);
 }
 
+function httpAbortLaunch(req, res) {
+  // Here we need to get the lauchId, How do we get the Id need it?
+  const launchId = req.params.id;
+  // if launch not exist
+  if (!existsLaunchWithId(launchId)) {
+    return res.status(404).json({
+      error: "Launch not found!",
+    });
+  }
+
+  // If the lauch does exist
+  return res.status(200).json(aborted);
+}
+
 module.exports = {
   httpGetAllLaunches,
   httpAddNewLaunch,
+  httpAbortLaunch,
 };
