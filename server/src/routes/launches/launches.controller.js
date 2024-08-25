@@ -43,7 +43,34 @@ function httpGetAllLaunches(req, res) {
 // Function controlller to handle added new launches
 function httpAddNewLaunch(req, res) {
   const launch = req.body; // the express server middleware will parse it in the body in app.js
+
+  // It's always important to validate our API for different errors
+  if (
+    !launch.mission ||
+    !launch.rocket ||
+    !launch.launchDate ||
+    !launch.destination
+  ) {
+    return res.status(404).json({
+      // We need to be consistent to the format. we could also have to return with a string
+      // but let's be consistent
+
+      error: "Missing required launch property",
+    });
+  }
+
   launch.launchDate = new Date(launch.launchDate);
+  // validating dates to check if it is in a valid format not a string
+  if (launch.launchDate.toString() === "Invalid Date") {
+    // if (isNaN(launch.launchDate)) {
+    // We can also check if dates is invalid like this: Note: NaN => Not a Number
+    // which calls automatically: valueOf() to verify it's falsy or truthy
+    // const date = new Date("1 january, 2030")
+    // if(isNaN(launch.launchDate)){ } the object passed in isNaN() will be first checked if it is a number
+    return res.status(400).json({
+      error: "Invalid launch date",
+    });
+  }
 
   addNewLaunche(launch);
 
