@@ -30,7 +30,44 @@ describe("GET /launches", () => {
 
 // One test or group of tests
 describe("POST /launches", () => {
-  test("It should respond with 200 success", () => {});
+  const completeLaunchData = {
+    mission: "USS Enterprise",
+    rocket: "NCC 1701-D",
+    target: "Kepler-186 f",
+    launchDate: "January 4, 2028",
+  };
+
+  // Declaring data without date
+
+  const launchDateWithoutDate = {
+    mission: "USS Enterprise",
+    rocket: "NCC 1701-D",
+    target: "Kepler-186 f",
+    //   launchDate: "January 4, 2028"
+  };
+
+  test("It should respond with 201 created", async () => {
+    const response = await request(app)
+      .post("/launches")
+      .send(completeLaunchData)
+      // Keep on chaining to add headers
+      .expect("Content-Type", /json/)
+      .expect(201);
+
+    // To make sure that the date part is working correctly, we need to set the request variable ...
+    //   const requestDate = completeLaunchData.launchDate;//// need to add constructor to make sure they are in the same format
+    const requestDate = new Date(completeLaunchData.launchDate).valueOf();
+    // matching the requestDate with the date that comes back from the response
+    const responseDate = new Date(response.body.launchDate).valueOf();
+
+    // Now to make sure that they are equal
+    expect(requestDate).toBe(responseDate);
+
+    // Whenever we check the body, we use the Jest assertion not the supertest assetion
+    // And I'll add a method from Jest API Docs that is toMatchObject() to match the passed object
+    // properties that needs to match
+    expect(response.body).toMatchObject(launchDateWithoutDate);
+  });
 
   test("It should catch missing required properties", () => {});
 
