@@ -53,7 +53,7 @@ function httpAddNewLaunch(req, res) {
     !launch.launchDate ||
     !launch.target
   ) {
-    return res.status(404).json({
+    return res.status(400).json({
       // We need to be consistent to the format. we could also have to return with a string
       // but let's be consistent
 

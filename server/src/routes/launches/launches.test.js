@@ -8,6 +8,7 @@
 
 const request = require("supertest");
 const app = require("../../app");
+const { param } = require("./launches.router");
 
 describe("GET /launches", () => {
   // then here write the actual test codes
@@ -39,11 +40,20 @@ describe("POST /launches", () => {
 
   // Declaring data without date
 
-  const launchDateWithoutDate = {
+  const launchDataWithoutDate = {
     mission: "USS Enterprise",
     rocket: "NCC 1701-D",
     target: "Kepler-186 f",
     //   launchDate: "January 4, 2028"
+  };
+
+  // Creating object with an invalid date
+
+  const launchDataWithInvalidDate = {
+    mission: "USS Enterprise",
+    rocket: "NCC 1701-D",
+    target: "Kepler-186 f",
+    launchDate: "booooo",
   };
 
   test("It should respond with 201 created", async () => {
@@ -66,12 +76,40 @@ describe("POST /launches", () => {
     // Whenever we check the body, we use the Jest assertion not the supertest assetion
     // And I'll add a method from Jest API Docs that is toMatchObject() to match the passed object
     // properties that needs to match
-    expect(response.body).toMatchObject(launchDateWithoutDate);
+    expect(response.body).toMatchObject(launchDataWithoutDate);
   });
 
-  test("It should catch missing required properties", () => {});
+  // Testing for errors
+  test("It should catch missing required properties", async () => {
+    // pasting our codes to make our launch's request
+    const response = await request(app)
+      .post("/launches")
+      .send(launchDataWithoutDate)
+      // Keep on chaining to add headers
+      .expect("Content-Type", /json/)
+      .expect(400);
 
-  test("It should catch invalid dates", () => {});
+    // Now we need to use expect from jest to check the body of the object
+    expect(response.body).toStrictEqual({
+      error: "Missing required launch property",
+    });
+  });
+
+  test("It should catch invalid dates", async () => {
+    // Using the same above codes as base
+    // pasting our codes to make our launch's request
+    const response = await request(app)
+      .post("/launches")
+      .send(launchDataWithInvalidDate)
+      // Keep on chaining to add headers
+      .expect("Content-Type", /json/)
+      .expect(400);
+
+    // Now we need to use expect from jest to check the body of the object
+    expect(response.body).toStrictEqual({
+      error: "Invalid launch date",
+    });
+  });
 });
 
 // With the above, how do we write real API tests against our API and test the response?
