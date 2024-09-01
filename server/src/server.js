@@ -1,5 +1,7 @@
 const http = require("http");
 
+const mongoose = require("mongoose");
+
 // const express = require("express");
 
 // const app = express();
@@ -18,9 +20,21 @@ const { loadPlanetsData } = require("./models/planets.model");
 // setting the port: find on server in environment variables, if not found run on 8000
 const PORT = process.env.PORT || 8000;
 
+// Over here, let's create the database connection. here used MongoBb.
+// We use the string connection from MongoDb account
+
+const MONGO_URL =
+  "mongodb+srv://scotprimer:cECcr0JnaqAfPlBR@cluster0.8qohn.mongodb.net/nasa?retryWrites=true&w=majority&appName=Cluster0";
+
 const server = http.createServer(app);
 
 async function startServer() {
+  // Right here, we need to connect to mongo before our server start listening
+  // so that all of our data is available when we start handling requests from
+  //from the user. and we have to await them. then optionally pass another
+
+  await mongoose.connect(MONGO_URL);
+
   // Awaiting loadPlanetsData function so that my planets data is available
   // for any request that ever comes in to my server
 
