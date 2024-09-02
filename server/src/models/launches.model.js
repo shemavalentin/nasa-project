@@ -1,3 +1,6 @@
+// Importing Mongoose Model
+//const launches = require("./launches.mongo");
+
 //Let's use Map() function to allow mapping keys and values
 const launches = new Map();
 

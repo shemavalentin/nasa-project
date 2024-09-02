@@ -56,3 +56,12 @@ const launchSchema = new mongoose.Schema({
     default: true,
   },
 });
+
+// Schema is less nothing when it's not connected to a collection of documents
+// and to connect a schema to a collection we use a Model given by mongoose library.
+// In the model we pass it the name of the collection and the schema we built
+
+// This model connects launchesSchema with the 'launches' collections (MongoDb collections should always be in plural)
+module.exports = mongoose.model("Launch", launchSchema); // Lauch here must be in singular cze mode pluralize it automatically to meet the collection of many documents exists in collections
+// We have to export the Mongoose Model
+// When a Model is set to use a schema, Mongoose calls this statement compiling the model.
