@@ -10,8 +10,9 @@ const launch = {
   mission: "Kepler Exploration X",
   rocket: "Explorer IS1",
   launchDate: new Date("December 27, 2030"),
-  target: "Kepler-442 b",
-  customer: ["GTech", "NASA"],
+  target: "Kepler-442 b", // the target could habe been referenced as a foreign key if I was using the SQL db and referenced throug the id as planets are store in a separete table.
+  // and luckly, the mongoose follow the same approach.
+  customers: ["GTech", "NASA"],
   upcoming: true,
   success: true,
 };

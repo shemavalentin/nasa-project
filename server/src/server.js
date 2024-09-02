@@ -24,19 +24,52 @@ const PORT = process.env.PORT || 8000;
 // We use the string connection from MongoDb account
 
 const MONGO_URL =
-  "mongodb+srv://scotprimer:cECcr0JnaqAfPlBR@cluster0.8qohn.mongodb.net/nasa?retryWrites=true&w=majority&appName=Cluster0";
+  "mongodb+srv://shemavalentin:W3reAmalaC8qffAB@cluster0.c4wsb.mongodb.net/nasadb?retryWrites=true&w=majority&appName=Cluster0";
+
+//mongodb+srv://shemavalentin:W3reAmalaC8qffAB@cluster0.c4wsb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 
 const server = http.createServer(app);
+
+// Let's test the connection here: note that the mongoose.connection is an event emmiter
+// that needs subscription
+
+mongoose.connection.once("open", () => {
+  // this function that has the open event will only be triggered once, the first time the connection is ready.
+  console.log("MongoDB connection ready!");
+});
+
+// NOW WHAT IF THERE IS ERRORS?
+// As we don't know how many and when the error will get triggered. it could definitely be more than once.
+// use the ON() to this event emiter
+
+mongoose.connection.on("error", (err) => {
+  // console.log() we can use
+  console.error(err);
+});
 
 async function startServer() {
   // Right here, we need to connect to mongo before our server start listening
   // so that all of our data is available when we start handling requests from
-  //from the user. and we have to await them. then optionally pass another
-
-  await mongoose.connect(MONGO_URL);
+  //from the user. and we have to await them. then optionally pass another.
 
   // Awaiting loadPlanetsData function so that my planets data is available
-  // for any request that ever comes in to my server
+  // for any request that ever comes in to my server and the server should start
+  // listening when data is available.
+
+  await mongoose.connect(MONGO_URL, {
+    // IMPORTANT: Every time you connect using mongoose, you'll pass in four parmeters
+    // into the connect function. If we don't specify these options, we will get some
+    // deprecation warnings in our console warning us that the best way of doing things
+    // is by passing in use new URL PARSER AND SETTING THAT TO TRUE..
+    // Now let's do it:
+    //useNewUrlParser: true, // This determines how Mongoose parses that connection string we just copied into our mongo URL
+    //useFindAndModify: false, // It desables the outdated way of updating Mongo data using using this function
+    //useCreateIndex: true, // Here Mongoose will use the CreateIndex function rather than the older and ensure index function
+    //useUnifiedTopology: true, // using this function, Mongoose will use the updated way of talking to clusters of Mongo database using this unified topology approach.
+    // All of the above functions are options in the MongoDB driver that Mongoose uses to connect to our database.
+  });
+
+  // NOW, HOW DO WE TEST THAT OUR CONNECTION IS WORKING? the mongodb exposes these functions. ....> UP
 
   await loadPlanetsData(); // notice no return value is need as it is on server
 
