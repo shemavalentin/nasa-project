@@ -2,6 +2,12 @@ const fs = require("fs");
 const path = require("path");
 const { parse } = require("csv-parse");
 
+// Now after building planets.mongo.js that is where we need to save and persist our data,
+// let's connect our controller (API) with our mongodb to talk to collections but step by step
+// to avoid breaking our server
+
+const planets = require("./planets.mongo");
+
 const habitablePlanets = [];
 
 function isHabitablePlanet(planet) {
@@ -27,9 +33,19 @@ function loadPlanetsData() {
           columns: true,
         })
       )
-      .on("data", (data) => {
+      .on("data", async (data) => {
         if (isHabitablePlanet(data)) {
-          habitablePlanets.push(data);
+          // habitablePlanets.push(data);
+          // Here whether to push the data to the habitablePlanets array, after requiring
+          // let's push data to our mongodb. collection--> document
+          /* TODO: REPLACE BELLOW CREATE WITH INSERT + UPDATE = UPSERT
+          await planets.create({
+            // create function here, creates a new document and pass the same data defined from the schema.
+            keplerName: data.keple_name,
+
+            // Now to avoid that this document will be created many times when we created many instances/clusters of server.js as the loadPlanetsData() is called many times
+            // Mongoose simply solved this problem using upsert func(insert + update): Insert + Update = upsert
+          }); */
         }
       })
       .on("error", (error) => {
