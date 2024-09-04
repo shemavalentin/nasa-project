@@ -24,7 +24,7 @@ const PORT = process.env.PORT || 8000;
 // We use the string connection from MongoDb account
 
 const MONGO_URL =
-  "mongodb+srv://shemavalentin:W3reAmalaC8qffAB@cluster0.c4wsb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+  "mongodb+srv://shemavalentin:W3reAmalaC8qffAB@cluster0.c4wsb.mongodb.net/nasabd?retryWrites=true&w=majority&appName=Cluster0";
 
 //mongodb+srv://shemavalentin:W3reAmalaC8qffAB@cluster0.c4wsb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 

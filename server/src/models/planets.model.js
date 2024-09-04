@@ -80,8 +80,13 @@ async function getAllPlanets() {
       // the find func accept the 2nd argument that is an object also called projection in Mongo.
       // This argument object it's the list of fields from those planet documents that you'd like
       // to include in the result.
+    },
+    // The second parameter what is called projection can help to mention data I don't need to display
+    {
+      _id: 0,
+      __v: 0, // Here we are telling our find operation to specifically exclude
+      // properties which match these names in MongoDb.
     }
-    //{}
   );
 }
 
