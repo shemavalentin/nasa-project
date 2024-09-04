@@ -19,7 +19,7 @@ const {
 // Now with that the Controller that briges Routes and Model was blank
 // let's connect both of them
 
-function httpGetAllLaunches(req, res) {
+async function httpGetAllLaunches(req, res) {
   //return res.status(200).json(); // Unfortunately the map objects that we have in
   // our model aren't javascript object notation. we need to convert the object to
   // the plane js array or object like this from map, so that we can return the
@@ -37,7 +37,7 @@ function httpGetAllLaunches(req, res) {
   // function that works woth our HTTP request and response , an HTTP function by saying
   // HTTPgetAllLaunches.
 
-  return res.status(200).json(getAllLaunches());
+  return res.status(200).json(await getAllLaunches());
 
   // Note: As we know, every function starting with http returns a response
 }

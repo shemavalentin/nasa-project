@@ -38,16 +38,24 @@ WRITE ANOTHER FUNCTION TO COMPUTE OUT DATA STRUCTURES.
 // This function is called DATA ACCESS FUNCTION. it doesn't receive any parameter because it is in models, no req, or res
 // This function doesn't have to be complicated, and the benefit of this as we write more codes.
 
-function getAllLaunches() {
-  return Array.from(launches.values());
+async function getAllLaunches() {
+  // return Array.from(launches.values());
+  return await launchesDatabase.find(
+    {},
+    // using the projection argument to make sure that we are not showing the MongoDB IDs or Mongoose version key in our response
+    {
+      _id: 0,
+      __v: 0,
+    }
+  );
 }
 
 // Function to save data to our mongodb
 
-async function saveLaunch(lauch) {
+async function saveLaunch(launch) {
   await launchesDatabase.updateOne(
     {
-      flightNumber: lauch.flightNumber, //  if the flight number matches the new launch flightNumber,
+      flightNumber: launch.flightNumber, //  if the flight number matches the new launch flightNumber,
     },
     // if the above document already exist, then we update it here, and if it does not exist
     // we will insert
