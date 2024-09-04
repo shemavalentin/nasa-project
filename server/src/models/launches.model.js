@@ -1,7 +1,8 @@
 // Importing Mongoose Model
-//const launches = require("./launches.mongo");
+const launchesDatabase = require("./launches.mongo");
 
 //Let's use Map() function to allow mapping keys and values
+
 const launches = new Map();
 
 // To create the new launche we need to track the flightNumber and not the client to send it to us
@@ -20,8 +21,10 @@ const launch = {
   success: true,
 };
 
+saveLaunch(launch);
+
 // From Map function let's set the launches
-launches.set(launch.flightNumber, launch); // here launch.flightNumber is passed as a key and the launch as value
+// launches.set(launch.flightNumber, launch); // here launch.flightNumber is passed as a key and the launch as value
 
 // The function to check the existence of the id in model
 function existsLaunchWithId(launchId) {
@@ -37,6 +40,23 @@ WRITE ANOTHER FUNCTION TO COMPUTE OUT DATA STRUCTURES.
 
 function getAllLaunches() {
   return Array.from(launches.values());
+}
+
+// Function to save data to our mongodb
+
+async function saveLaunch(lauch) {
+  await launchesDatabase.updateOne(
+    {
+      flightNumber: lauch.flightNumber, //  if the flight number matches the new launch flightNumber,
+    },
+    // if the above document already exist, then we update it here, and if it does not exist
+    // we will insert
+
+    launch, // we insert the lauch object
+
+    // Then remember to pass in the third object
+    { upsert: true }
+  );
 }
 
 //Writting a function that our router can use to set our launches in the launches Map()
