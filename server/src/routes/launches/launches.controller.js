@@ -11,7 +11,8 @@
 // Let's use HTTP to be more explicity
 const {
   getAllLaunches,
-  addNewLaunche,
+  // addNewLaunche,
+  scheduleNewLaunch,
   existsLaunchWithId,
   abortLaunchById,
 } = require("../../models/launches.model");
@@ -43,7 +44,7 @@ async function httpGetAllLaunches(req, res) {
 }
 
 // Function controlller to handle added new launches
-function httpAddNewLaunch(req, res) {
+async function httpAddNewLaunch(req, res) {
   const launch = req.body; // the express server middleware will parse it in the body in app.js
 
   // It's always important to validate our API for different errors
@@ -74,7 +75,7 @@ function httpAddNewLaunch(req, res) {
     });
   }
 
-  addNewLaunche(launch);
+  await scheduleNewLaunch(launch);
 
   // what to return now? Remember, when we POST to a collection and the request succeeds
   // we want to show the status
@@ -106,6 +107,5 @@ module.exports = {
   existsLaunchWithId,
   httpGetAllLaunches,
   httpAddNewLaunch,
-  addNewLaunche,
   httpAbortLaunch,
 };

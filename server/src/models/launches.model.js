@@ -51,7 +51,7 @@ async function getLatestFlightNumber() {
   const latestLaunch = await launchesDatabase
     .findOne() // We need only one, let's use findOne() with no filter => (find({filter obj}))
     // Be clever and sort launches
-    // .sort('flighNumber') // by default this sorts ascending order
+    // .sort('flighNumber')  // by default this sorts ascending order
     // but we need to sort from the highest to the lowest, we need the highest to appear above and we do it like this by adding minus sign
     .sort("-flightNumber");
 
@@ -113,6 +113,25 @@ async function saveLaunch(launch) {
 
 //Writting a function that our router can use to set our launches in the launches Map()
 // the function will accept launche which will be added to the collection
+
+// ==== ADDINNG A VERSION OF THE addNewLaunch FUNCTION THAT WORKS WITH OUR DATABASE.
+async function scheduleNewLaunch(launch) {
+  // Notice how this function is not exported. It's an implementation detail, but not the core functionality for our launch.
+  // Here let's call getLatestFlightNumber function to get new launch and increment it
+  const newFlightNumber = (await getLatestFlightNumber()) + 1;
+  const newLaunch = Object.assign(launch, {
+    // here I'm copying some properties needed to be added int lauch
+    success: true,
+    upcoming: true,
+    customers: ["Clever Technologies", "NAZA"],
+    flightNumber: newFlightNumber,
+  });
+
+  // Now let's save our new launch by calling the function to perform save
+  await saveLaunch(newLaunch);
+}
+
+/*
 function addNewLaunche(launch) {
   // Now use the latestFlightNumber to increament it on server side
   latestFlightNumber += 1;
@@ -132,6 +151,8 @@ function addNewLaunche(launch) {
     })
   );
 }
+
+*/
 
 // Creating a function to abort a lauch by Id
 function abortLaunchById(launchId) {
@@ -159,9 +180,10 @@ function abortLaunchById(launchId) {
 // it in the rest our code.
 
 module.exports = {
-  getAllLaunches,
-  addNewLaunche,
   existsLaunchWithId,
+  getAllLaunches,
+  // addNewLaunche,
+  scheduleNewLaunch,
   abortLaunchById,
 };
 
