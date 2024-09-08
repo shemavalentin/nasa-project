@@ -1,6 +1,11 @@
 // Importing Mongoose Model
 const launchesDatabase = require("./launches.mongo");
 
+// Import planets.mongo.js to help in validation of planets to check that the planets the
+// user is referencing exist
+
+const planets = require("./planets.mongo");
+
 //Let's use Map() function to allow mapping keys and values
 
 const launches = new Map();
@@ -14,8 +19,10 @@ const launch = {
   mission: "Kepler Exploration X",
   rocket: "Explorer IS1",
   launchDate: new Date("December 27, 2030"),
-  target: "Kepler-442 b", // the target could habe been referenced as a foreign key if I was using the SQL db and referenced throug the id as planets are store in a separete table.
+  // target: "Valentin's home planet", // the target could habe been referenced as a foreign key if I was using the SQL db and referenced throug the id as planets are store in a separete table.
   // and luckly, the mongoose follow the same approach.
+
+  target: "Kepler-442 b",
   customers: ["GTech", "NASA"],
   upcoming: true,
   success: true,
@@ -53,6 +60,19 @@ async function getAllLaunches() {
 // Function to save data to our mongodb
 
 async function saveLaunch(launch) {
+  // let's now check if the planet exists/find or use findOne to return only one not all
+  const planet = await planets.findOne({
+    keplerName: launch.target,
+  });
+
+  // If does not exist
+  if (!planet) {
+    // thing to remember, here we are not in the controller where we are allowed to return
+    // error message. we are at the lower layer. so how to signal error? we can retun an invalid object, or
+    // preferably throw an error using built in Error object
+
+    throw new Error("No matching planet was found");
+  }
   await launchesDatabase.updateOne(
     {
       flightNumber: launch.flightNumber, //  if the flight number matches the new launch flightNumber,
