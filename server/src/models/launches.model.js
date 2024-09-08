@@ -6,12 +6,14 @@ const launchesDatabase = require("./launches.mongo");
 
 const planets = require("./planets.mongo");
 
-//Let's use Map() function to allow mapping keys and values
+// let's define the constant here above to assing whene the database is empty
+const DEFAUL_FLIGHT_NUMBER = 100;
 
+//Let's use Map() function to allow mapping keys and values
 const launches = new Map();
 
 // To create the new launche we need to track the flightNumber and not the client to send it to us
-let latestFlightNumber = 100; // as it is in launch object
+// let latestFlightNumber = 100; // as it is in launch object
 
 // Let's say we need to store our launches into a javascript object
 const launch = {
@@ -41,6 +43,28 @@ function existsLaunchWithId(launchId) {
 /* TO ABSTRACT AWAY THE COMPUTATION THAT OTHER WORLD DOESN'T NEED TO CARE WE HAVE TO 
 WRITE ANOTHER FUNCTION TO COMPUTE OUT DATA STRUCTURES.
 */
+
+// A function to keep track of new launch and solving the auto Increament  problem in MongoDB
+// Let's make it async because we are querrying from MongoDB
+async function getLatestFlightNumber() {
+  // After commenting the flightNumber, let's look at the latest launch
+  const latestLaunch = await launchesDatabase
+    .findOne() // We need only one, let's use findOne() with no filter => (find({filter obj}))
+    // Be clever and sort launches
+    // .sort('flighNumber') // by default this sorts ascending order
+    // but we need to sort from the highest to the lowest, we need the highest to appear above and we do it like this by adding minus sign
+    .sort("-flightNumber");
+
+  // if there is no launches in our database, we need to validate it and save that very first launch
+  // If there is no latest launch, it means in the database there is no data
+  if (!latestLaunch) {
+    return DEFAUL_FLIGHT_NUMBER;
+  }
+
+  // then return from our function the launch flight Number
+
+  return latestLaunch.flightNumber;
+}
 
 // This function is called DATA ACCESS FUNCTION. it doesn't receive any parameter because it is in models, no req, or res
 // This function doesn't have to be complicated, and the benefit of this as we write more codes.
