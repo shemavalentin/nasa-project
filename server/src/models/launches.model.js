@@ -97,7 +97,9 @@ async function saveLaunch(launch) {
 
     throw new Error("No matching planet was found");
   }
-  await launchesDatabase.updateOne(
+  // await launchesDatabase.updateOne(==> To send very few data over the network for hacking issue let's
+  // use avery similar function to updateOne
+  await launchesDatabase.findOneAndUpdate(
     {
       flightNumber: launch.flightNumber, //  if the flight number matches the new launch flightNumber,
     },

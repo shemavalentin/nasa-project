@@ -76,11 +76,14 @@ async function httpAddNewLaunch(req, res) {
   }
 
   await scheduleNewLaunch(launch);
+  console.log(launch);
 
   // what to return now? Remember, when we POST to a collection and the request succeeds
   // we want to show the status
 
-  return res.status(201).json(launch);
+  return res.status(201).json(launch); //  The dollar sign found in our API might be from this scheduleNewLaunch() that is mutating our object.
+  // it is changing the properties on it and adding the data that Mongoose gets back from our database into the very same object that we pass in.
+  // let's test with by console.log the lauch object
 }
 
 function httpAbortLaunch(req, res) {
