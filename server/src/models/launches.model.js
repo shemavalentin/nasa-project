@@ -10,7 +10,8 @@ const planets = require("./planets.mongo");
 const DEFAUL_FLIGHT_NUMBER = 100;
 
 //Let's use Map() function to allow mapping keys and values
-const launches = new Map();
+
+// const launches = new Map();
 
 // To create the new launche we need to track the flightNumber and not the client to send it to us
 // let latestFlightNumber = 100; // as it is in launch object
@@ -36,8 +37,10 @@ saveLaunch(launch);
 // launches.set(launch.flightNumber, launch); // here launch.flightNumber is passed as a key and the launch as value
 
 // The function to check the existence of the id in model
-function existsLaunchWithId(launchId) {
-  return launches.has(launchId);
+async function existsLaunchWithId(launchId) {
+  return await launchesDatabase.findOne({
+    flightNumber: launchId,
+  });
 }
 
 /* TO ABSTRACT AWAY THE COMPUTATION THAT OTHER WORLD DOESN'T NEED TO CARE WE HAVE TO 
@@ -122,7 +125,7 @@ async function scheduleNewLaunch(launch) {
   // Here let's call getLatestFlightNumber function to get new launch and increment it
   const newFlightNumber = (await getLatestFlightNumber()) + 1;
   const newLaunch = Object.assign(launch, {
-    // here I'm copying some properties needed to be added int lauch
+    // here I'm copying some properties needed to be added into lauch
     success: true,
     upcoming: true,
     customers: ["Clever Technologies", "NAZA"],
@@ -157,24 +160,38 @@ function addNewLaunche(launch) {
 */
 
 // Creating a function to abort a lauch by Id
-function abortLaunchById(launchId) {
+async function abortLaunchById(launchId) {
+  const aborted = await launchesDatabase.updateOne(
+    {
+      // the flightNumber here corresponds to launchId
+      flightNumber: launchId,
+    },
+    {
+      // the second argument to put here is the list of properties we need to update
+      upcoming: false,
+      success: false,
+    }
+  );
+
+  return aborted.ok === 1 && aborted.nModified === 1;
+
   // this will completely delete the launch.
   //launches.delete(launchId);
   // whether to completely delete it, let's mark it as aborted instead of removing it
   // after all that data is still usefull to us.
 
   // Now
-  const aborted = launches.get(launchId);
-  // then on that object, we set aborted to upcomming and now upcomming missions are no
-  // longer upcomming. they are entirely cancelled.
+  // const aborted = launches.get(launchId);
+  // // then on that object, we set aborted to upcomming and now upcomming missions are no
+  // // longer upcomming. they are entirely cancelled.
 
-  aborted.upcoming = false;
+  // aborted.upcoming = false;
 
-  // then mutate the aborted object property to false,
-  aborted.success = false;
-  // here the mission is going to be in historical list, and will be marked as not successful.
-  // that's what we needed.
-  return aborted;
+  // // then mutate the aborted object property to false,
+  // aborted.success = false;
+  // // here the mission is going to be in historical list, and will be marked as not successful.
+  // // that's what we needed.
+  // return aborted;
 }
 
 // Now let's access our launches

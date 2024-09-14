@@ -57,7 +57,6 @@ async function httpAddNewLaunch(req, res) {
     return res.status(400).json({
       // We need to be consistent to the format. we could also have to return with a string
       // but let's be consistent
-
       error: "Missing required launch property",
     });
   }
@@ -76,7 +75,7 @@ async function httpAddNewLaunch(req, res) {
   }
 
   await scheduleNewLaunch(launch);
-  console.log(launch);
+  //console.log(launch);
 
   // what to return now? Remember, when we POST to a collection and the request succeeds
   // we want to show the status
@@ -86,7 +85,7 @@ async function httpAddNewLaunch(req, res) {
   // let's test with by console.log the lauch object
 }
 
-function httpAbortLaunch(req, res) {
+async function httpAbortLaunch(req, res) {
   // Here we need to get the lauchId, How do we get the Id need it?
   // But like this, the id is comming back as string while in Map in model is a number
   // so, we need to convert it into a numbet
@@ -95,15 +94,24 @@ function httpAbortLaunch(req, res) {
   const launchId = Number(req.params.id);
 
   // if launch not exist
-  if (!existsLaunchWithId(launchId)) {
+  const existsLaunch = await existsLaunchWithId(launchId);
+  if (!existsLaunch) {
     return res.status(404).json({
       error: "Launch not found!",
     });
   }
 
-  // If the lauch does exist
-  const aborted = abortLaunchById(launchId);
-  return res.status(200).json(aborted);
+  // being consistent in RESTfull API best practices it's by returning Json format
+  const aborted = await abortLaunchById(launchId);
+  if (!aborted) {
+    return res.status(400).json({
+      error: "Launch not aborted",
+    });
+  }
+
+  return res.status(200).json({
+    ok: true,
+  });
 }
 
 module.exports = {
