@@ -1,6 +1,8 @@
 const http = require("http");
 
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
+
+const { mongoConnect } = require("./services/mongo");
 
 // const express = require("express");
 
@@ -23,30 +25,33 @@ const PORT = process.env.PORT || 8000;
 // Over here, let's create the database connection. here used MongoBb.
 // We use the string connection from MongoDb account
 
+/* THE FOLLOWING CODES HAVE MOVED TO mongo.js for test error handling
 const MONGO_URL =
   "mongodb+srv://shemavalentin:W3reAmalaC8qffAB@cluster0.c4wsb.mongodb.net/nasabd?retryWrites=true&w=majority&appName=Cluster0";
 
 //mongodb+srv://shemavalentin:W3reAmalaC8qffAB@cluster0.c4wsb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-
+*/
 const server = http.createServer(app);
 
 // Let's test the connection here: note that the mongoose.connection is an event emmiter
 // that needs subscription
 
-mongoose.connection.once("open", () => {
-  // this function that has the open event will only be triggered once, the first time the connection is ready.
-  console.log("MongoDB connection ready!");
-});
+/*  THESE CODES WERE MOVED TO mongo.js file for TEST ERROR HANDLING
 
-// NOW WHAT IF THERE IS ERRORS?
-// As we don't know how many and when the error will get triggered. it could definitely be more than once.
-// use the ON() to this event emiter
+// mongoose.connection.once("open", () => {
+//   // this function that has the open event will only be triggered once, the first time the connection is ready.
+//   console.log("MongoDB connection ready!");
+// });
 
-mongoose.connection.on("error", (err) => {
-  // console.log() we can use
-  console.error(err);
-});
+// // NOW WHAT IF THERE IS ERRORS?
+// // As we don't know how many and when the error will get triggered. it could definitely be more than once.
+// // use the ON() to this event emiter
 
+// mongoose.connection.on("error", (err) => {
+//   // console.log() we can use
+//   console.error(err);
+// });
+*/
 async function startServer() {
   // Right here, we need to connect to mongo before our server start listening
   // so that all of our data is available when we start handling requests from
@@ -55,6 +60,8 @@ async function startServer() {
   // Awaiting loadPlanetsData function so that my planets data is available
   // for any request that ever comes in to my server and the server should start
   // listening when data is available.
+
+  /* CODES MODED TO mongo.js
 
   await mongoose.connect(MONGO_URL, {
     // IMPORTANT: Every time you connect using mongoose, you'll pass in four parmeters
@@ -69,7 +76,12 @@ async function startServer() {
     // All of the above functions are options in the MongoDB driver that Mongoose uses to connect to our database.
   });
 
+  */
+
   // NOW, HOW DO WE TEST THAT OUR CONNECTION IS WORKING? the mongodb exposes these functions. ....> UP
+
+  //Now use the codes from our mongo.js
+  await mongoConnect();
 
   await loadPlanetsData(); // notice no return value is need as it is on server
 
