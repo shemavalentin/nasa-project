@@ -10,7 +10,7 @@ const request = require("supertest");
 const app = require("../../app");
 //const { param } = require("./launches.router");
 
-const { mongoConnect } = require("../../services/mongo");
+const { mongoConnect, mongoDisconnect } = require("../../services/mongo");
 
 // Now, where the mongoConnect function will be called?
 
@@ -25,6 +25,11 @@ describe("Launches API", () => {
   beforeAll(async () => {
     // What we need to set up is our mongo connection
     await mongoConnect();
+  });
+
+  // Disconnecting the database using the imported function created imported from mongo.js
+  afterAll(async () => {
+    await mongoDisconnect();
   });
 
   describe("GET /launches", () => {
@@ -51,7 +56,7 @@ describe("Launches API", () => {
     const completeLaunchData = {
       mission: "USS Enterprise",
       rocket: "NCC 1701-D",
-      target: "Kepler-186 f",
+      target: "Kepler-62 f",
       launchDate: "January 4, 2028",
     };
 
@@ -60,7 +65,7 @@ describe("Launches API", () => {
     const launchDataWithoutDate = {
       mission: "USS Enterprise",
       rocket: "NCC 1701-D",
-      target: "Kepler-186 f",
+      target: "Kepler-62 f",
       //   launchDate: "January 4, 2028"
     };
 
@@ -69,8 +74,8 @@ describe("Launches API", () => {
     const launchDataWithInvalidDate = {
       mission: "USS Enterprise",
       rocket: "NCC 1701-D",
-      target: "Kepler-186 f",
-      launchDate: "booooo",
+      target: "Kepler-62 f",
+      launchDate: "Zoot",
     };
 
     test("It should respond with 201 created", async () => {

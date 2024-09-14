@@ -49,6 +49,12 @@ async function mongoConnect() {
   });
 }
 
+// Making a function to disconnect from Mongo
+async function mongoDisconnect() {
+  await mongoose.disconnect();
+}
+
 module.exports = {
   mongoConnect,
+  mongoDisconnect,
 };
