@@ -173,7 +173,8 @@ async function abortLaunchById(launchId) {
     }
   );
 
-  return aborted.ok === 1 && aborted.nModified === 1;
+  // return aborted.ok === 1 && aborted.nModified === 1; // It has been depricated, do the following either
+  return aborted.modifiedCount === 1;
 
   // this will completely delete the launch.
   //launches.delete(launchId);
