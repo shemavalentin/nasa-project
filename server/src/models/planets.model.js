@@ -67,7 +67,7 @@ function loadPlanetsData() {
   });
 }
 
-// Creating ACCESS function to abstracts calculationd that is passed to the controller
+// Creating ACCESS function to abstracts calculations that is passed to the controller
 async function getAllPlanets() {
   // return habitablePlanets;
 

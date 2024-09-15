@@ -5,10 +5,16 @@ const express = require("express");
 const cors = require("cors");
 
 const morgan = require("morgan");
+/* MOVED TO api.js FOR VERSIONING ISSUE
+// const planetRouter = require("./routes/planets/planet.router");
 
-const planetRouter = require("./routes/planets/planet.router");
+// const launchesRouter = require("./routes/launches/launches.router");
 
-const launchesRouter = require("./routes/launches/launches.router");
+*/
+
+// importing the api router
+
+const api = require("./routes/api");
 
 const app = express();
 
@@ -32,8 +38,18 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "..", "public"))); // the path.join helps to find the file we want through the path
 // and join two files using that path
 
-app.use("/planets", planetRouter);
-app.use("/launches", launchesRouter);
+/* MOVED TO api.js FOR VERSIONING
+// app.use("/v1/planets", planetRouter);
+// app.use("/v1/launches", launchesRouter);
+
+*/
+
+//====Adding the api as middleware to our servers middleware chain here by calling:
+app.use("/v1", api); // now the route with v ersion is mounted.
+
+// If we had the version2 of our API, we could also mount it here like this
+// app.use("/v2", apiVersion2). this allows us to support multiple versions of our APIs.
+// but for now we only have version1 only.
 
 // Serving the index.html to the root so that the user doesn't need to specify that he needs to load index.html
 // and so that that first page load corresponds to the launch page.

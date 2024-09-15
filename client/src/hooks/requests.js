@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8000";
+const API_URL = "http://localhost:8000/v1";
 
 async function httpGetPlanets() {
   // Consuming getAllPlanets under local host and our set PORT: 8000  as the backend is running on 8000

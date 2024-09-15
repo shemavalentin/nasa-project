@@ -40,7 +40,7 @@ describe("Launches API", () => {
       //Now with the above, let's write a request aginst the response
       const response = await request(app)
         // using chaining whether to use Jest assertion
-        .get("/launches")
+        .get("/v1/launches")
         // Adding headers
         .expect("Content-Type", /json/)
         .expect(200);
@@ -80,7 +80,7 @@ describe("Launches API", () => {
 
     test("It should respond with 201 created", async () => {
       const response = await request(app)
-        .post("/launches")
+        .post("/v1/launches")
         .send(completeLaunchData)
         // Keep on chaining to add headers
         .expect("Content-Type", /json/)
@@ -105,7 +105,7 @@ describe("Launches API", () => {
     test("It should catch missing required properties", async () => {
       // pasting our codes to make our launch's request
       const response = await request(app)
-        .post("/launches")
+        .post("/v1/launches")
         .send(launchDataWithoutDate)
         // Keep on chaining to add headers
         .expect("Content-Type", /json/)
@@ -121,7 +121,7 @@ describe("Launches API", () => {
       // Using the same above codes as base
       // pasting our codes to make our launch's request
       const response = await request(app)
-        .post("/launches")
+        .post("/v1/launches")
         .send(launchDataWithInvalidDate)
         // Keep on chaining to add headers
         .expect("Content-Type", /json/)
