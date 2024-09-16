@@ -1,3 +1,6 @@
+// Using the third party library to make http requests  to the source.
+// It runs both in the browser and node.js
+const axios = require("axios");
 // Importing Mongoose Model
 const launchesDatabase = require("./launches.mongo");
 
@@ -18,20 +21,56 @@ const DEFAUL_FLIGHT_NUMBER = 100;
 
 // Let's say we need to store our launches into a javascript object
 const launch = {
-  flightNumber: 100,
-  mission: "Kepler Exploration X",
-  rocket: "Explorer IS1",
-  launchDate: new Date("December 27, 2030"),
+  flightNumber: 100, // flight_number exists in our SPACEX API
+  mission: "Kepler Exploration X", // equals to name in our launch response.
+  rocket: "Explorer IS1", // exists in our SPACEX API as the rocked.name
+  launchDate: new Date("December 27, 2030"), // also chosen from spaceX as date_local
   // target: "Valentin's home planet", // the target could habe been referenced as a foreign key if I was using the SQL db and referenced throug the id as planets are store in a separete table.
   // and luckly, the mongoose follow the same approach.
 
-  target: "Kepler-442 b",
-  customers: ["GTech", "NASA"],
-  upcoming: true,
-  success: true,
+  target: "Kepler-442 b", // No applicable value in spaceX, it is a new feature.
+  customers: ["GTech", "NASA"], // customers comes from payload.customers for each payload in spaceX
+  upcoming: true, //upcoming exists in API
+  success: true, // success exists in API
 };
 
 saveLaunch(launch);
+
+// Defining the URL that is the source of data
+const SPACEX_API_URL = "https://api.spacexdata.com/v4/launches/query";
+
+// Function to load data from spaceX(this function should download the data and pass it to the controller after)
+async function loadLaunchesData() {
+  console.log("Downloading launch data ...");
+  // making a POST request and await the promise returned by axios.post that takes main arguments
+  const response = await axios.post(SPACEX_API_URL, {
+    // The second argument is request body which contains the query and options that defines
+    // which launches data we're going to get back from that API.
+    // So, let's start by the query we wrote in postman to select the rocket.
+    query: {},
+    options: {
+      populate: [
+        {
+          path: "rocket",
+          select: {
+            name: 1,
+          },
+        },
+        // As there is no direct customer array as in recent object, but we have the reference ID in the payload
+        // that points to payloads array data for that let's create another path for the
+        // payload to get the customers
+
+        {
+          path: "payloads",
+          // the value we want to select:
+          select: {
+            customers: 1, //set to 1 to make sure that value comes in the response.
+          },
+        },
+      ],
+    },
+  });
+}
 
 // From Map function let's set the launches
 // launches.set(launch.flightNumber, launch); // here launch.flightNumber is passed as a key and the launch as value
@@ -200,6 +239,7 @@ async function abortLaunchById(launchId) {
 // it in the rest our code.
 
 module.exports = {
+  loadLaunchesData,
   existsLaunchWithId,
   getAllLaunches,
   // addNewLaunche,

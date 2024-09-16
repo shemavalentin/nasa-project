@@ -19,6 +19,9 @@ const app = require("./app");
 // alternatively use destructuring to know that we using the imported function
 const { loadPlanetsData } = require("./models/planets.model");
 
+// Loading Launch data(from spaceX) in the model.
+const { loadLaunchData } = require("./models/launches.model");
+
 // setting the port: find on server in environment variables, if not found run on 8000
 const PORT = process.env.PORT || 8000;
 
@@ -84,6 +87,9 @@ async function startServer() {
   await mongoConnect();
 
   await loadPlanetsData(); // notice no return value is need as it is on server
+
+  // We need launches from SpaceX also to appear in our database too when the server loads
+  await loadLaunchData();
 
   server.listen(PORT, () => {
     console.log(`Listening on port ${PORT}...`);
