@@ -39,8 +39,8 @@ saveLaunch(launch);
 // Defining the URL that is the source of data
 const SPACEX_API_URL = "https://api.spacexdata.com/v4/launches/query";
 
-// Function to load data from spaceX(this function should download the data and pass it to the controller after)
-async function loadLaunchData() {
+//Function for checking if the launch already exist
+async function populateLaunches() {
   console.log("Downloading launch data ...");
   // making a POST request and await the promise returned by axios.post that takes main arguments
   const response = await axios.post(SPACEX_API_URL, {
@@ -49,6 +49,7 @@ async function loadLaunchData() {
     // So, let's start by the query we wrote in postman to select the rocket.
     query: {},
     options: {
+      pagination: false,
       populate: [
         {
           path: "rocket",
@@ -106,7 +107,36 @@ async function loadLaunchData() {
       customers,
     };
     console.log(`${launch.flightNumber} ${launch.mission}`);
+
+    // TODO: populate lauches collection ....
   }
+}
+
+// Function to load data from spaceX(this function should download the data and pass it to the controller after)
+async function loadLaunchData() {
+  // Checking if that first SpaceX launch already exists before we download launch data.
+  // use the function created findLaunch
+
+  const firstLaunch = await findLaunch({
+    // passing in the criteria matching the lauch that we just looked at.
+    flightNumber: 1,
+    rocket: "Falcon 1",
+    mission: "FalconSat",
+  });
+  // checking if the lauch already exist
+  if (firstLaunch) {
+    console.log("Launch data already loaded!");
+  } else {
+    // now call populateLaunches() function here in else statement
+    // it is an async function we have to await it
+    await populateLaunches();
+  }
+}
+
+// To reduce the load on our API as we disabled pagination, let's write a generic functio
+// to only download only launch data that we don't already have.
+async function findLaunch(filter) {
+  return await launchesDatabase.findOne(filter);
 }
 
 // From Map function let's set the launches
@@ -114,7 +144,8 @@ async function loadLaunchData() {
 
 // The function to check the existence of the id in model
 async function existsLaunchWithId(launchId) {
-  return await launchesDatabase.findOne({
+  // return await launchesDatabase.findOne({
+  return await findLaunch({
     flightNumber: launchId,
   });
 }
