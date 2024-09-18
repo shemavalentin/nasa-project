@@ -72,6 +72,14 @@ async function populateLaunches() {
     },
   });
 
+  // Validating the response status code
+  if (response.status !== 200) {
+    console.log("Problem downloading lauch data");
+
+    // throwing an error up into our controller to terminate this function
+    throw new Error("Launch data download failed");
+  }
+
   // Creating the data constant.
 
   // response.data: here showing that data is the property from response object which is where AXIOS puts the body of the
@@ -94,7 +102,7 @@ async function populateLaunches() {
     // back from our response into a launch object that can be saved into our database
     const launch = {
       // taking it in the format we want
-      flightNumber: launchDoc["flight_number"],
+      flightNumber: launchDoc["flight_number"], // This way, we mapped our launch object, taking the lauch properties as they live in mongo, and mapping them to the lauch properties from our API response.
       mission: launchDoc["name"],
       rocket: launchDoc["rocket"]["name"],
       launchDate: launchDoc["date_local"],
@@ -109,6 +117,9 @@ async function populateLaunches() {
     console.log(`${launch.flightNumber} ${launch.mission}`);
 
     // TODO: populate lauches collection ....
+
+    // Now we need to save launch object to the database, we call the saveLaunch() function
+    await saveLaunch(launch);
   }
 }
 
@@ -194,19 +205,6 @@ async function getAllLaunches() {
 // Function to save data to our mongodb
 
 async function saveLaunch(launch) {
-  // let's now check if the planet exists/find or use findOne to return only one not all
-  const planet = await planets.findOne({
-    keplerName: launch.target,
-  });
-
-  // If does not exist
-  if (!planet) {
-    // thing to remember, here we are not in the controller where we are allowed to return
-    // error message. we are at the lower layer. so how to signal error? we can retun an invalid object, or
-    // preferably throw an error using built in Error object
-
-    throw new Error("No matching planet was found");
-  }
   // await launchesDatabase.updateOne(==> To send very few data over the network for hacking issue let's
   // use avery similar function to updateOne
   await launchesDatabase.findOneAndUpdate(
@@ -228,6 +226,20 @@ async function saveLaunch(launch) {
 
 // ==== ADDINNG A VERSION OF THE addNewLaunch FUNCTION THAT WORKS WITH OUR DATABASE.
 async function scheduleNewLaunch(launch) {
+  // let's now check if the planet exists/find or use findOne to return only one not all
+  const planet = await planets.findOne({
+    keplerName: launch.target,
+  });
+
+  // If does not exist
+  if (!planet) {
+    // thing to remember, here we are not in the controller where we are allowed to return
+    // error message. we are at the lower layer. so how to signal error? we can retun an invalid object, or
+    // preferably throw an error using built in Error object
+
+    throw new Error("No matching planet was found");
+  }
+
   // Notice how this function is not exported. It's an implementation detail, but not the core functionality for our launch.
   // Here let's call getLatestFlightNumber function to get new launch and increment it
   const newFlightNumber = (await getLatestFlightNumber()) + 1;
