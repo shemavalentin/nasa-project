@@ -40,7 +40,7 @@ saveLaunch(launch);
 const SPACEX_API_URL = "https://api.spacexdata.com/v4/launches/query";
 
 // Function to load data from spaceX(this function should download the data and pass it to the controller after)
-async function loadLaunchesData() {
+async function loadLaunchData() {
   console.log("Downloading launch data ...");
   // making a POST request and await the promise returned by axios.post that takes main arguments
   const response = await axios.post(SPACEX_API_URL, {
@@ -70,6 +70,43 @@ async function loadLaunchesData() {
       ],
     },
   });
+
+  // Creating the data constant.
+
+  // response.data: here showing that data is the property from response object which is where AXIOS puts the body of the
+  // response from the server.
+  // So, launchData is now the data coming in from the body of our response.
+  const launchDocs = response.data.docs; // the docs here came from the response in postman where docs is an array of many launches
+
+  // Now creating a for loop that goes over each launch in our launch data.
+  for (const launchDoc of launchDocs) {
+    //Setting a payload that contains customers
+    const payloads = launchDoc["payloads"];
+
+    // Getting cunstomers from this list of payloads. I will use the flatMap() built in method to convert the nested arrays of customers into a flat array
+    const customers = payloads.flatMap((payload) => {
+      // remember one payload my have one or more customers
+      return payload["customers"]; // That's it. we got a single customers list for that lauch.
+    });
+
+    // Now here inside of the loop, the goal will be to convert this launchDoc item as it comes
+    // back from our response into a launch object that can be saved into our database
+    const launch = {
+      // taking it in the format we want
+      flightNumber: launchDoc["flight_number"],
+      mission: launchDoc["name"],
+      rocket: launchDoc["rocket"]["name"],
+      launchDate: launchDoc["date_local"],
+      upcoming: launchDoc["upcoming"],
+      success: launchDoc["success"],
+
+      // customers will be a special case. it is going to be an array that contains other arrays
+      // with payloads. that's why we have to set the payload
+      // customers: customers
+      customers,
+    };
+    console.log(`${launch.flightNumber} ${launch.mission}`);
+  }
 }
 
 // From Map function let's set the launches
@@ -239,7 +276,7 @@ async function abortLaunchById(launchId) {
 // it in the rest our code.
 
 module.exports = {
-  loadLaunchesData,
+  loadLaunchData,
   existsLaunchWithId,
   getAllLaunches,
   // addNewLaunche,
