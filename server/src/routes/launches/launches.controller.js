@@ -38,6 +38,9 @@ async function httpGetAllLaunches(req, res) {
   // function that works woth our HTTP request and response , an HTTP function by saying
   // HTTPgetAllLaunches.
 
+  console.log(req.query); // like this we can have access to the query parameter
+  // http://localhost:8000/v1/launches?limit=50&page=3
+
   return res.status(200).json(await getAllLaunches());
 
   // Note: As we know, every function starting with http returns a response

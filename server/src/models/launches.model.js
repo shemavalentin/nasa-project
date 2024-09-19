@@ -192,14 +192,20 @@ async function getLatestFlightNumber() {
 
 async function getAllLaunches() {
   // return Array.from(launches.values());
-  return await launchesDatabase.find(
-    {},
-    // using the projection argument to make sure that we are not showing the MongoDB IDs or Mongoose version key in our response
-    {
-      _id: 0,
-      __v: 0,
-    }
-  );
+  return await launchesDatabase
+    .find(
+      {},
+      // using the projection argument to make sure that we are not showing the MongoDB IDs or Mongoose version key in our response
+      {
+        _id: 0,
+        __v: 0,
+      }
+    )
+    .skip(20) // this skip() method allows us to skip over mentioned number of documents you passed in.
+    // Mongoose and MongoDB allow you to chain a .limit function onto your find function like this,
+    // then this allows you to limit the amount of documents that comes back from Mongo
+    .limit(50);
+  // In this case we will return 50 documents after we've skipped the first 20.
 }
 
 // Function to save data to our mongodb
