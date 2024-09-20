@@ -18,7 +18,7 @@ const DEFAUL_FLIGHT_NUMBER = 100;
 
 // To create the new launche we need to track the flightNumber and not the client to send it to us
 // let latestFlightNumber = 100; // as it is in launch object
-
+/*
 // Let's say we need to store our launches into a javascript object
 const launch = {
   flightNumber: 100, // flight_number exists in our SPACEX API
@@ -34,8 +34,8 @@ const launch = {
   success: true, // success exists in API
 };
 
-saveLaunch(launch);
-
+saveLaunch(launch);   // BY REMOVING lauch object, now we are using the real life data from API
+*/
 // Defining the URL that is the source of data
 const SPACEX_API_URL = "https://api.spacexdata.com/v4/launches/query";
 
@@ -201,6 +201,13 @@ async function getAllLaunches(skip, limit) {
         __v: 0,
       }
     )
+    //Here we can make an other chain to sort the result of find() method as in Mongo it is easy
+    .sort({
+      // determining the order that the documents come back in by passing this as an object.
+      // Here let's take the object in our response that determine the order of our launches
+      // flightNumber:-1 // -1 to say it will sort in a discending order
+      flightNumber: 1, // 1 for ascending order
+    })
     // .skip(20) // this skip() method allows us to skip over mentioned number of documents you passed in.
 
     .skip(skip)
