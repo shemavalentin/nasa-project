@@ -190,7 +190,7 @@ async function getLatestFlightNumber() {
 // This function is called DATA ACCESS FUNCTION. it doesn't receive any parameter because it is in models, no req, or res
 // This function doesn't have to be complicated, and the benefit of this as we write more codes.
 
-async function getAllLaunches() {
+async function getAllLaunches(skip, limit) {
   // return Array.from(launches.values());
   return await launchesDatabase
     .find(
@@ -201,10 +201,16 @@ async function getAllLaunches() {
         __v: 0,
       }
     )
-    .skip(20) // this skip() method allows us to skip over mentioned number of documents you passed in.
+    // .skip(20) // this skip() method allows us to skip over mentioned number of documents you passed in.
+
+    .skip(skip)
+
     // Mongoose and MongoDB allow you to chain a .limit function onto your find function like this,
     // then this allows you to limit the amount of documents that comes back from Mongo
-    .limit(50);
+
+    //.limit(50);
+
+    .limit(limit);
   // In this case we will return 50 documents after we've skipped the first 20.
 }
 

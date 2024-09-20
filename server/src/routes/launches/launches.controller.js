@@ -17,6 +17,8 @@ const {
   abortLaunchById,
 } = require("../../models/launches.model");
 
+const { getPagination } = require("../../services/query");
+
 // Now with that the Controller that briges Routes and Model was blank
 // let's connect both of them
 
@@ -38,10 +40,15 @@ async function httpGetAllLaunches(req, res) {
   // function that works woth our HTTP request and response , an HTTP function by saying
   // HTTPgetAllLaunches.
 
-  console.log(req.query); // like this we can have access to the query parameter
-  // http://localhost:8000/v1/launches?limit=50&page=3
+  // console.log(req.query); // like this we can have access to the query parameter
+  // // http://localhost:8000/v1/launches?limit=50&page=3  .
 
-  return res.status(200).json(await getAllLaunches());
+  // let's use detructuring to get values from query parameter
+  // const { page, limit } = req.query;
+  const { skip, limit } = getPagination(req.query);
+  const launches = await getAllLaunches(skip, limit); // Then use the skip and limit in getAllLaunches in launches.model
+
+  return res.status(200).json(launches);
 
   // Note: As we know, every function starting with http returns a response
 }
