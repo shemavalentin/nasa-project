@@ -11,6 +11,9 @@
 
 const mongoose = require("mongoose");
 
+// Ensuring that our tests know the URL of our Mongo database
+require("dotenv").config();
+
 // Here will use whatever has been set from .env file but under the process.env. then put property
 const MONGO_URL = process.env.MONGO_URL; // Now for these values to be populated, we need to actually
 // apply apply the changes using our .env package. we can do this in server.js file
