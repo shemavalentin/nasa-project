@@ -1,5 +1,11 @@
 const http = require("http");
 
+// requiring dotenv in server.js and we don't assign it to a constant because we
+// call the .config function directly on the module.
+// the .config function is the only function, the only property of the dotenv module
+// that we are going to take advantage of
+require("dotenv").config(); // this should be populate above here to let other imported files here be populated by the environment
+
 // const mongoose = require("mongoose");
 
 const { mongoConnect } = require("./services/mongo");
@@ -22,7 +28,7 @@ const { loadPlanetsData } = require("./models/planets.model");
 // Loading Launch data(from spaceX) in the model.
 const { loadLaunchData } = require("./models/launches.model");
 
-// setting the port: find on server in environment variables, if not found run on 8000
+// setting the port: find on server in environment variables the port to run on, then if not found run on 8000
 const PORT = process.env.PORT || 8000;
 
 // Over here, let's create the database connection. here used MongoBb.

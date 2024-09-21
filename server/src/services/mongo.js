@@ -11,8 +11,9 @@
 
 const mongoose = require("mongoose");
 
-const MONGO_URL =
-  "mongodb+srv://shemavalentin:W3reAmalaC8qffAB@cluster0.c4wsb.mongodb.net/nasabd?retryWrites=true&w=majority&appName=Cluster0";
+// Here will use whatever has been set from .env file but under the process.env. then put property
+const MONGO_URL = process.env.MONGO_URL; // Now for these values to be populated, we need to actually
+// apply apply the changes using our .env package. we can do this in server.js file
 
 // The following are Event listeners
 
