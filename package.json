@@ -6,7 +6,6 @@
   "scripts": {
     "install-server": "npm install --prefix server",
     "install-client": "npm install --prefix client",
-    "install": "npm install-server && npm run install-client",
     "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client",
     "server": "npm run start --prefix server",
     "client": "npm start --prefix client",
