@@ -11,6 +11,7 @@ const app = require("../../app");
 //const { param } = require("./launches.router");
 
 const { mongoConnect, mongoDisconnect } = require("../../services/mongo");
+const { loadPlanetsData } = require("../../models/planets.model");
 
 // Now, where the mongoConnect function will be called?
 
@@ -25,6 +26,9 @@ describe("Launches API", () => {
   beforeAll(async () => {
     // What we need to set up is our mongo connection
     await mongoConnect();
+
+    //  calling the loadPlanetsData() to run first before the test runs as there could be the habitable planets before the test run
+    await loadPlanetsData();
   });
 
   // Disconnecting the database using the imported function created imported from mongo.js
