@@ -11,13 +11,12 @@ jobs:
     env:
       CI: true
       # We can bring the MONGODB URL HERE TO CONNECT TO THE DB IN MONGO
-        MONGO_URL: mongodb://localhost/nasa  # When this database nasa doesn't exist, one will be creates for us  to use
+      MONGO_URL: mongodb://localhost/nasa # When this database nasa doesn't exist, one will be creates for us  to use
     strategy:
       matrix:
         node-version: [18.x, 20.x]
         # We can here specify the version of MongoDB to avoid the breack changes that may happen
-        mongodb-version: ['4.4']
-
+        mongodb-version: ["4.4"]
 
     runs-on: ubuntu-latest
     steps:
@@ -34,7 +33,7 @@ jobs:
           # Let's first name it
       - name: Use MongoDB from github Actions
         uses: supercharge/mongodb-github-action@1.11.0 # used the uses to specify the name of the action
-        with: 
+        with:
           mongodb-version: ${{ matrix.mongodb-version }}
 
       - run: npm install
