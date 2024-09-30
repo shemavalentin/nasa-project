@@ -18,10 +18,6 @@ on:
 
   pull_request:
     branches: [ master ]
-
-    #  THE FUN PARTS HERE
-    #  Here we define JOBS that are supposed to run when one of these two events are
-    #  triggered under this jobs property
 jobs:
   build:  # We should specify which platform, this job should run on, which operating system will be building our project
   runs-on: ubuntu-latest     # Could be also windows-latest, or macos-latest
