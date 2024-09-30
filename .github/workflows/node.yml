@@ -27,7 +27,7 @@ jobs:
   runs-on: windows-latest     # Could be also windows-latest, or macos-latest
     steps:    # This is where we define actions(reusable scripts) that are going to be taken on ubuntu whenever our build job is triggered by a push or pull request to the master branch
     # 1st step
-      - uses: actions/chechout@v3   #These actions have been prebuilt for us by github's developpers or third party. we have to add the version of these scripts to avoid breaks of our workflow when the owner releases the breaking changes
+      - uses: actions/checkout@v3   #These actions have been prebuilt for us by github's developpers or third party. we have to add the version of these scripts to avoid breaks of our workflow when the owner releases the breaking changes
       
     # 2nd step: this step is to make sure we have node installed, and we can give it a name
       - name: use Node.js version 20
