@@ -3,29 +3,20 @@
 name: NASA Project CI
 on:
   push:
-    branches: [ master ] 
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 jobs:
-  build:  
-    runs-on: ubuntu-latest     
-    steps:   
-      - uses: actions/checkout@v4       
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
       - name: Use Node.js version 20
         uses: actions/setup-node@v4
         with:
-            node-version: '20'
-        - run: npm install
-        - run: npm run build --prefix client
-
-
-
-
-
-
-
-
-
+          node-version: "20"
+      - run: npm install
+      - run: npm run build --prefix client
 
     # # when we are doing continious deployment we can add onother job like deploy
     # # and by default github's action would run through both of these jobs in parallel, side by side
@@ -33,4 +24,3 @@ jobs:
     #   #  But if we need to that deploy job will run when the build job is success, we
     #   #  have to add another option
     #   needs: build # Now, github's action will run these jobs sequetially.
-
