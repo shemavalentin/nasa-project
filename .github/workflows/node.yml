@@ -9,9 +9,8 @@ on:
   push:
     # specifically run when there is new codes pushed to these branches defined in the array
     # under branches options
-
-    branches: [ master ] # this is where we need to verfy our codes works and that we can build our project
-
+    branches: [ master ] 
+    # this is where we need to verfy our codes works and that we can build our project
     #  But if we are using Github's pull request flow, where we ask the main repository
     #  to marge in some changes that we've made instead of pushing them directly onto the
     #  master branch, Well to cacth those pull requests we can add another trigger
@@ -20,10 +19,13 @@ on:
     branches: [ master ]
 jobs:
   build:  # We should specify which platform, this job should run on, which operating system will be building our project
-  runs-on: ubuntu-latest     # Could be also windows-latest, or macos-latest
-    steps:    # This is where we define actions(reusable scripts) that are going to be taken on ubuntu whenever our build job is triggered by a push or pull request to the master branch
+  runs-on: ubuntu-latest     
+  # Could be also windows-latest, or macos-latest
+    steps:    
+    # This is where we define actions(reusable scripts) that are going to be taken on ubuntu whenever our build job is triggered by a push or pull request to the master branch
     # 1st step
-      - uses: actions/checkout@v3   #These actions have been prebuilt for us by github's developpers or third party. we have to add the version of these scripts to avoid breaks of our workflow when the owner releases the breaking changes
+      - uses: actions/checkout@v3   
+      #These actions have been prebuilt for us by github's developpers or third party. we have to add the version of these scripts to avoid breaks of our workflow when the owner releases the breaking changes
       
     # 2nd step: this step is to make sure we have node installed, and we can give it a name
       - name: use Node.js version 20
