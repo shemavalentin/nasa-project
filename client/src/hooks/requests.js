@@ -1,4 +1,14 @@
-const API_URL = "http://localhost:8000/v1";
+// const API_URL = "http://localhost:8000/v1";
+
+// Updated to this to run the above url in the cloud regardless where we are running our server
+// Now the client will know where to make requests that it is to the API that's living
+// on the same address at the same origin as the front end.
+
+// And we have to remember that we are serving both the front end client as well as the
+// server using the same node application. the API and our front end are both hosted on
+// the same server regarless of whether it's localhost or some other domain.
+
+const API_URL = "v1";
 
 async function httpGetPlanets() {
   // Consuming getAllPlanets under local host and our set PORT: 8000  as the backend is running on 8000

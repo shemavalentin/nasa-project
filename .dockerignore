@@ -1,0 +1,27 @@
+# This file contains the list of folders that we want to exclude from our Docker image
+# when we use the COPY command
+
+# If we're using Git, we can exclude the .git folder where Git stores all of your
+#  local branches and commits.
+
+.git
+
+#  The following line says that we are excluding the node module folder if it exists in any
+#  at the root of the root of our NASA project. Now our local dependencies, the ones
+#  installed on our machine, will not be sent to our docker image, which will make 
+# sure that all of our packages and dependancies are installed fresh specificallu for the 
+#  operating system used in our Docker image.
+
+*/node_modules
+
+# Another good practice is to exclude any build artifacts from our local machine
+# That is anything that can be derived from the rest of our source code. for example 
+# the public folder in our server is the result of running the npm build command in our 
+#  client.
+
+#  Now to make sure that everything is built from scracth in Docker, we are going to 
+#  want to run that npm run build command in Alpine Linux and not rely on anything
+#  from our local machine.
+
+# server/public
+
