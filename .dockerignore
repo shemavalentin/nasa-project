@@ -23,5 +23,5 @@
 #  want to run that npm run build command in Alpine Linux and not rely on anything
 #  from our local machine.
 
-# server/public
+server/public
 

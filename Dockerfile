@@ -4,7 +4,7 @@
 FROM node:lts-alpine
 
 # Creating a folder for our application
-# app is the folder where our files will live/ where all subsequent commands will run
+# app is the folder where our files will live/ where all subsequent commands will be run
 WORKDIR /app  
 
 # Then here in app folder I can run whatever commands 
@@ -39,8 +39,6 @@ RUN npm install
 #  Layer that will run the server install
 # RUN npm run install-server --only=production   # update since NPM 8
 RUN npm run install-server --omit=dev
-
-
 
 # For the client to build, we need to copy over, this time the entire client folder onto 
 # the client path which means now the npm run build command will only if the contents of

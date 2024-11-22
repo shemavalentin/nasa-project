@@ -39,18 +39,7 @@ mongoose.connection.on("error", (err) => {
 async function mongoConnect() {
   // then copy codes from server.js
 
-  await mongoose.connect(MONGO_URL, {
-    // IMPORTANT: Every time you connect using mongoose, you'll pass in four parmeters
-    // into the connect function. If we don't specify these options, we will get some
-    // deprecation warnings in our console warning us that the best way of doing things
-    // is by passing in use new URL PARSER AND SETTING THAT TO TRUE..
-    // Now let's do it:
-    //useNewUrlParser: true, // This determines how Mongoose parses that connection string we just copied into our mongo URL
-    //useFindAndModify: false, // It desables the outdated way of updating Mongo data using using this function
-    //useCreateIndex: true, // Here Mongoose will use the CreateIndex function rather than the older and ensure index function
-    //useUnifiedTopology: true, // using this function, Mongoose will use the updated way of talking to clusters of Mongo database using this unified topology approach.
-    // All of the above functions are options in the MongoDB driver that Mongoose uses to connect to our database.
-  });
+  await mongoose.connect(MONGO_URL);
 }
 
 // Making a function to disconnect from Mongo
